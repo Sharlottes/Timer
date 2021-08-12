@@ -2,20 +2,32 @@ package com.example.timer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.*;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.*;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
     boolean started, paused;
-    NumberPicker hourET, minuteET, secondET;
+    NumberPicker hourNP, minuteNP, secondNP;
+    EditText hourET, minuteET, secondET;
     int[] savedClock = {0, 0, 0};
 
+    public int getNumber(Editable s){
+        String str = s.toString().replaceAll("\\D", "");
+        if(str.length() > 1) {
+            if(str.length() > String.valueOf(Integer.MAX_VALUE).length()) {
+                str = str.substring(0, String.valueOf(Integer.MAX_VALUE).length() - 1);
+                Toast.makeText(getApplicationContext(), "숫자가 너무 큽니다.", Toast.LENGTH_SHORT).show();
+            }
+            else str = str.substring(0, str.length() - 1);
+        }
+
+        return str.isEmpty() ? 0 : Integer.parseInt(str);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,9 +36,12 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout timeCountSettingLV = (LinearLayout)findViewById(R.id.timeCountSettingLV);
         LinearLayout timeCountLV = (LinearLayout)findViewById(R.id.timeCountLV);
 
-        hourET = (NumberPicker)findViewById(R.id.hourET);
-        minuteET = (NumberPicker)findViewById(R.id.minuteET);
-        secondET = (NumberPicker)findViewById(R.id.secondET);
+        hourET = (EditText)findViewById(R.id.hourET);
+        minuteET = (EditText)findViewById(R.id.minuteET);
+        secondET = (EditText)findViewById(R.id.secondET);
+        hourNP = (NumberPicker)findViewById(R.id.hourNP);
+        minuteNP = (NumberPicker)findViewById(R.id.minuteNP);
+        secondNP = (NumberPicker)findViewById(R.id.secondNP);
 
         TextView hourTV = (TextView)findViewById(R.id.hourTV);
         TextView minuteTV = (TextView)findViewById(R.id.minuteTV);
@@ -34,12 +49,57 @@ public class MainActivity extends AppCompatActivity {
 
         Button startBtn = (Button)findViewById(R.id.startBtn);
 
-        hourET.setFormatter(v -> v + "시간");
-        minuteET.setFormatter(v -> v + "분");
-        secondET.setFormatter(v -> v + "초");
-        hourET.setMaxValue(48);
-        minuteET.setMaxValue(59);
-        secondET.setMaxValue(59);
+        hourNP.setFormatter(v -> v + "시간");
+        minuteNP.setFormatter(v -> v + "분");
+        secondNP.setFormatter(v -> v + "초");
+        hourNP.setMaxValue(48);
+        minuteNP.setMaxValue(59);
+        secondNP.setMaxValue(59);
+
+
+        hourET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void afterTextChanged(Editable s) {
+                int number = getNumber(s);
+                hourNP.setValue(Math.min(48, number));
+            }
+        });
+        minuteET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void afterTextChanged(Editable s) {
+                int number = getNumber(s);
+                hourET.setText(number / 60 + "");
+                hourNP.setValue(number / 60);
+                minuteNP.setValue(number % 60);
+            }
+        });
+        secondET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void afterTextChanged(Editable s) {
+                int number = getNumber(s);
+                hourET.setText(((number / 60) / 60) + "");
+                minuteET.setText(((number / 60) % 60) + "");
+                hourNP.setValue((number / 60) / 60);
+                minuteNP.setValue((number / 60) % 60);
+                secondNP.setValue(number % 60);
+            }
+        });
+        hourNP.setOnValueChangedListener((picker, olds, news) -> hourET.setText(news+""));
+        minuteNP.setOnValueChangedListener((picker, olds, news) -> minuteET.setText(news+""));
+        secondNP.setOnValueChangedListener((picker, olds, news) -> secondET.setText(news+""));
+
 
         // 시작버튼 이벤트 처리
         startBtn.setOnClickListener(view -> {
@@ -50,13 +110,13 @@ public class MainActivity extends AppCompatActivity {
             timeCountSettingLV.setVisibility(View.GONE);
             timeCountLV.setVisibility(View.VISIBLE);
 
-            final int[] clock = paused ? new int[]{hourET.getValue(), minuteET.getValue(), secondET.getValue()} : savedClock;
+            final int[] clock = paused ? new int[]{hourNP.getValue(), minuteNP.getValue(), secondNP.getValue()} : savedClock;
             if(!started){
                 Toast.makeText(getApplicationContext(), "타이머가 일시중지되었습니다.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            hourTV.setText((clock[0] <= 9 ? "0" : "") + clock[0] + "시간");
+            hourTV.setText(clock[0] + "시간");
             minuteTV.setText((clock[1] <= 9 ? "0" : "") + clock[1] + "분");
             secondTV.setText((clock[2] <= 9 ? "0" : "") + clock[2] + "초");
 
@@ -68,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(() -> {
                             paused = true;
                             savedClock = clock;
-                            hourTV.setText((clock[0] <= 9 ? "0" : "") + clock[0] + "시간");
+                            hourTV.setText(clock[0] + "시간");
                             minuteTV.setText((clock[1] <= 9 ? "0" : "") + clock[1] + "분");
                             secondTV.setText((clock[2] <= 9 ? "0" : "") + clock[2] + "초");
                             //timeCountSettingLV.setVisibility(View.VISIBLE);
@@ -92,9 +152,9 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     //시, 분, 초가 한자리수라면 숫자 앞에 0을 붙인다
-                    secondTV.setText((clock[2] <= 9 ? "0" : "") + clock[2] + "초");
+                    hourTV.setText(clock[0] + "시간");
                     minuteTV.setText((clock[1] <= 9 ? "0" : "") + clock[1] + "분");
-                    hourTV.setText((clock[0] <= 9 ? "0" : "") + clock[0] + "시간");
+                    secondTV.setText((clock[2] <= 9 ? "0" : "") + clock[2] + "초");
 
                     if(clock[2] > 0) { // 1초 이상이면
                         clock[2]--;
