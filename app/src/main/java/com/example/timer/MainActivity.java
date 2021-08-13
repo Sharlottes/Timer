@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.*;
 
+import java.lang.Process;
 import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,10 +21,9 @@ public class MainActivity extends AppCompatActivity {
         String str = s.toString().replaceAll("\\D", "");
         if(str.length() > 1) {
             if(str.length() > String.valueOf(Integer.MAX_VALUE).length()) {
-                str = str.substring(0, String.valueOf(Integer.MAX_VALUE).length() - 1);
+                str = str.substring(0, String.valueOf(Integer.MAX_VALUE).length());
                 Toast.makeText(getApplicationContext(), "숫자가 너무 큽니다.", Toast.LENGTH_SHORT).show();
             }
-            else str = str.substring(0, str.length() - 1);
         }
 
         return str.isEmpty() ? 0 : Integer.parseInt(str);
@@ -56,46 +56,36 @@ public class MainActivity extends AppCompatActivity {
         minuteNP.setMaxValue(59);
         secondNP.setMaxValue(59);
 
+        hourET.setOnFocusChangeListener((v, hasFocus) -> {
+            int hour = getNumber(hourET.getText());
+            hourNP.setValue(Math.min(48, hour));
+        });
+        minuteET.setOnFocusChangeListener((v, hasFocus) -> {
+            int minute = getNumber(minuteET.getText());
+            if(minute == minuteNP.getValue()){
+                if(minute == 0) minuteET.setText("");
+                return;
+            }
+            minuteET.setText((minute % 60 + ""));
+            minuteNP.setValue(minute % 60);
+            hourET.setText((Math.min(48, minute/60)+""));
+            hourNP.setValue(Math.min(48, minute/60));
+        });
+        secondET.setOnFocusChangeListener((v, hasFocus) -> {
+            int second = getNumber(secondET.getText());
+            if(second == secondNP.getValue()){
+                if(second == 0) secondET.setText("");
+                return;
+            }
+            secondET.setText((second % 60 + ""));
+            secondNP.setValue(second % 60);
+            minuteET.setText(((second/60)%60+""));
+            minuteNP.setValue((second/60)%60);
+            hourET.setText((Math.min(48, second/60/60)+""));
+            hourNP.setValue(Math.min(48, second/60/60));
+        });
 
-        hourET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            @Override
-            public void afterTextChanged(Editable s) {
-                int number = getNumber(s);
-                hourNP.setValue(Math.min(48, number));
-            }
-        });
-        minuteET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            @Override
-            public void afterTextChanged(Editable s) {
-                int number = getNumber(s);
-                hourET.setText(number / 60 + "");
-                hourNP.setValue(number / 60);
-                minuteNP.setValue(number % 60);
-            }
-        });
-        secondET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            @Override
-            public void afterTextChanged(Editable s) {
-                int number = getNumber(s);
-                hourET.setText(((number / 60) / 60) + "");
-                minuteET.setText(((number / 60) % 60) + "");
-                hourNP.setValue((number / 60) / 60);
-                minuteNP.setValue((number / 60) % 60);
-                secondNP.setValue(number % 60);
-            }
-        });
+
         hourNP.setOnValueChangedListener((picker, olds, news) -> hourET.setText(news+""));
         minuteNP.setOnValueChangedListener((picker, olds, news) -> minuteET.setText(news+""));
         secondNP.setOnValueChangedListener((picker, olds, news) -> secondET.setText(news+""));
