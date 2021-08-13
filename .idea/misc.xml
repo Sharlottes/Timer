@@ -3,8 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/user/AndroidStudioProjects/Timer/app/src/main/res/layout-v17/activity_main.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Timer/app/src/main/res/layout/activity_frame_transition.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Timer/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Timer/app/src/main/res/layout/activity_main.xml" value="0.5" />
       </map>
     </option>
   </component>

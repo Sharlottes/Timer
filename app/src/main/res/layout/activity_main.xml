@@ -33,18 +33,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="3"
-                android:hint="0"
+                android:hint="@string/_0"
                 android:inputType="textPersonName"
-                android:text=""></EditText>
+                android:text="" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text=":"
+                android:text="@string/_clock_mid"
                 android:textColor="@color/black"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/startBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,18 +55,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="3"
-                android:hint="0"
+                android:hint="@string/_0"
                 android:inputType="textPersonName"
-                android:text=""></EditText>
+                android:text="" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text=":"
+                android:text="@string/_clock_mid"
                 android:textColor="@color/black"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/startBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -77,9 +77,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="3"
-                android:hint="0"
+                android:hint="@string/_0"
                 android:inputType="textPersonName"
-                android:text=""></EditText>
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:hint="00시"
+                android:hint="@string/_00hour"
                 android:inputType="number" />
 
             <TextView
@@ -107,9 +107,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text=":"
+                android:text="@string/_clock_mid"
                 android:textColor="@color/black"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/startBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:hint="00분"
+                android:hint="@string/_clock_mid"
                 android:inputType="number" />
 
             <TextView
@@ -129,9 +129,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text=":"
+                android:text="@string/_clock_mid"
                 android:textColor="@color/black"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/startBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:hint="00초"
+                android:hint="@string/_00sec"
                 android:inputType="number" />
         </LinearLayout>
     </LinearLayout>
@@ -164,7 +164,7 @@
             android:id="@+id/hourTV"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:textColor="@color/black"
             android:layout_height="wrap_content"/>
@@ -174,8 +174,8 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="20dp"
-            android:text=":"
+            android:textSize="20sp"
+            android:text="@string/_clock_mid"
             android:gravity="center"
             app:layout_constraintBottom_toTopOf="@+id/startBtn"
             app:layout_constraintEnd_toEndOf="parent"
@@ -186,7 +186,7 @@
             android:id="@+id/minuteTV"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:textColor="@color/black"
             android:layout_height="wrap_content"/>
@@ -196,8 +196,8 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="20dp"
-            android:text=":"
+            android:textSize="20sp"
+            android:text="@string/_clock_mid"
             android:gravity="center"
             app:layout_constraintBottom_toTopOf="@+id/startBtn"
             app:layout_constraintEnd_toEndOf="parent"
@@ -208,7 +208,7 @@
             android:id="@+id/secondTV"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:textColor="@color/black"
             android:layout_height="wrap_content"/>
@@ -218,7 +218,7 @@
         android:id="@+id/startBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="시작"
+        android:text="@string/start"
         android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -226,26 +226,34 @@
 
     <LinearLayout
         android:id="@+id/ll_page"
-        android:layout_width="40dp"
-        android:layout_height="80dp"
-        android:background="@android:color/holo_green_dark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#80CBC4"
         android:orientation="vertical"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0000-00-00 00:00:00" />
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/btn_slide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:src="@drawable/more"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:contentDescription="@string/today"
         android:padding="7dp"
+        android:src="@drawable/more"
+        app:layout_constraintBottom_toTopOf="@+id/timeCountSettingLV"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

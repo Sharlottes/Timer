@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Timer</string>
+    <string name="_0">0</string>
+    <string name="_clock_mid">:</string>
+    <string name="_00hour">00시</string>
+    <string name="_00mid">00분</string>
+    <string name="_00sec">00초</string>
+    <string name="start">시작</string>
+    <string name="today">today</string>
 </resources>

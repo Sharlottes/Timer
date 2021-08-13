@@ -2,7 +2,6 @@ package com.example.timer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.media.Image;
 import android.os.*;
 import android.text.Editable;
 import android.view.View;
@@ -10,18 +9,22 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
     boolean started, paused;
     NumberPicker hourNP, minuteNP, secondNP;
     EditText hourET, minuteET, secondET;
+    TextView hourTV, minuteTV, secondTV;
+    Button startBtn;
+    LinearLayout timeCountSettingLV, timeCountLV;
     int[] savedClock = {0, 0, 0};
 
-    private LinearLayout ll_page;
-    private ImageButton btn_slide;
-    private Animation ani_left, ani_right;
-    private boolean isPageState;
+    LinearLayout ll_page;
+    ImageButton btn_slide;
+    Animation ani_left, ani_right;
+    TextView dateTV;
 
     public int getNumber(Editable s){
         String str = s.toString().replaceAll("\\D", "");
@@ -40,30 +43,9 @@ public class MainActivity extends AppCompatActivity {
         btn_slide = findViewById(R.id.btn_slide);
         ani_left = AnimationUtils.loadAnimation(this, R.anim.translate_left);
         ani_right = AnimationUtils.loadAnimation(this, R.anim.translate_right);
-    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initView();
-
-        final SlidingAnimationListener listener = new SlidingAnimationListener(ll_page);
-        ani_left.setAnimationListener(listener);
-        ani_right.setAnimationListener(listener);
-
-        btn_slide.setOnClickListener(v -> {
-            isPageState = listener.getIsPageState();
-            if(isPageState) {
-                ll_page.startAnimation(ani_left);
-            } else {
-                ll_page.setVisibility(View.VISIBLE);
-                ll_page.startAnimation(ani_right);
-            }
-        });
-
-        LinearLayout timeCountSettingLV = (LinearLayout)findViewById(R.id.timeCountSettingLV);
-        LinearLayout timeCountLV = (LinearLayout)findViewById(R.id.timeCountLV);
+        timeCountSettingLV = (LinearLayout)findViewById(R.id.timeCountSettingLV);
+        timeCountLV = (LinearLayout)findViewById(R.id.timeCountLV);
 
         hourET = (EditText)findViewById(R.id.hourET);
         minuteET = (EditText)findViewById(R.id.minuteET);
@@ -72,17 +54,44 @@ public class MainActivity extends AppCompatActivity {
         minuteNP = (NumberPicker)findViewById(R.id.minuteNP);
         secondNP = (NumberPicker)findViewById(R.id.secondNP);
 
-        TextView hourTV = (TextView)findViewById(R.id.hourTV);
-        TextView minuteTV = (TextView)findViewById(R.id.minuteTV);
-        TextView secondTV = (TextView)findViewById(R.id.secondTV);
+        hourTV = (TextView)findViewById(R.id.hourTV);
+        minuteTV = (TextView)findViewById(R.id.minuteTV);
+        secondTV = (TextView)findViewById(R.id.secondTV);
 
-        Button startBtn = (Button)findViewById(R.id.startBtn);
+        startBtn = (Button)findViewById(R.id.startBtn);
+        dateTV = (TextView)findViewById(R.id.date);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initView();
+
+        dateTV.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
+        final SlidingAnimationListener listener = new SlidingAnimationListener(ll_page);
+        ani_left.setAnimationListener(listener);
+        ani_right.setAnimationListener(listener);
+        btn_slide.setOnClickListener(v -> {
+            if(listener.getIsPageState()) {
+                ll_page.startAnimation(ani_left);
+            } else {
+                ll_page.setVisibility(View.VISIBLE);
+                ll_page.startAnimation(ani_right);
+            }
+        });
 
         hourNP.setFormatter(v -> v + "시간");
-        minuteNP.setFormatter(v -> v + "분");
-        secondNP.setFormatter(v -> v + "초");
+        hourNP.setOnValueChangedListener((picker, olds, news) -> hourET.setText(news+""));
         hourNP.setMaxValue(48);
+
+        minuteNP.setFormatter(v -> v + "분");
+        minuteNP.setOnValueChangedListener((picker, olds, news) -> minuteET.setText(news+""));
         minuteNP.setMaxValue(59);
+
+        secondNP.setFormatter(v -> v + "초");
+        secondNP.setOnValueChangedListener((picker, olds, news) -> secondET.setText(news+""));
         secondNP.setMaxValue(59);
 
         hourET.setOnFocusChangeListener((v, hasFocus) -> {
@@ -113,12 +122,6 @@ public class MainActivity extends AppCompatActivity {
             hourET.setText((Math.min(48, second/60/60)+""));
             hourNP.setValue(Math.min(48, second/60/60));
         });
-
-
-        hourNP.setOnValueChangedListener((picker, olds, news) -> hourET.setText(news+""));
-        minuteNP.setOnValueChangedListener((picker, olds, news) -> minuteET.setText(news+""));
-        secondNP.setOnValueChangedListener((picker, olds, news) -> secondET.setText(news+""));
-
 
         // 시작버튼 이벤트 처리
         startBtn.setOnClickListener(view -> {
