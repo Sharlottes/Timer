@@ -2,13 +2,14 @@ package com.example.timer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.Image;
 import android.os.*;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 
-import java.lang.Process;
 import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,6 +17,11 @@ public class MainActivity extends AppCompatActivity {
     NumberPicker hourNP, minuteNP, secondNP;
     EditText hourET, minuteET, secondET;
     int[] savedClock = {0, 0, 0};
+
+    private LinearLayout ll_page;
+    private ImageButton btn_slide;
+    private Animation ani_left, ani_right;
+    private boolean isPageState;
 
     public int getNumber(Editable s){
         String str = s.toString().replaceAll("\\D", "");
@@ -28,10 +34,33 @@ public class MainActivity extends AppCompatActivity {
 
         return str.isEmpty() ? 0 : Integer.parseInt(str);
     }
+
+    private void initView() {
+        ll_page = findViewById(R.id.ll_page);
+        btn_slide = findViewById(R.id.btn_slide);
+        ani_left = AnimationUtils.loadAnimation(this, R.anim.translate_left);
+        ani_right = AnimationUtils.loadAnimation(this, R.anim.translate_right);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initView();
+
+        final SlidingAnimationListener listener = new SlidingAnimationListener(ll_page);
+        ani_left.setAnimationListener(listener);
+        ani_right.setAnimationListener(listener);
+
+        btn_slide.setOnClickListener(v -> {
+            isPageState = listener.getIsPageState();
+            if(isPageState) {
+                ll_page.startAnimation(ani_left);
+            } else {
+                ll_page.setVisibility(View.VISIBLE);
+                ll_page.startAnimation(ani_right);
+            }
+        });
 
         LinearLayout timeCountSettingLV = (LinearLayout)findViewById(R.id.timeCountSettingLV);
         LinearLayout timeCountLV = (LinearLayout)findViewById(R.id.timeCountLV);
