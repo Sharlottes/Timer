@@ -17,6 +17,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <Button
+            android:id="@+id/inputReset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="입력 초기화"
+            app:backgroundTint="#03A9F4" />
+
         <LinearLayout
             android:id="@+id/timeCountSetting1LV"
             android:layout_width="match_parent"
