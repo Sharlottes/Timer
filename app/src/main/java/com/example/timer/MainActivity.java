@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     NumberPicker hourNP, minuteNP, secondNP;
     EditText hourET, minuteET, secondET;
     TextView hourTV, minuteTV, secondTV;
-    Button startBtn, resetBtn;
+    Button startBtn;
     LinearLayout timeCountSettingLV, timeCountLV;
     int[] savedClock = {0, 0, 0};
 
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         minuteTV = (TextView)findViewById(R.id.minuteTV);
         secondTV = (TextView)findViewById(R.id.secondTV);
 
-        resetBtn = (Button)findViewById(R.id.inputReset);
         startBtn = (Button)findViewById(R.id.startBtn);
         dateTV = (TextView)findViewById(R.id.date);
     }
@@ -97,49 +96,31 @@ public class MainActivity extends AppCompatActivity {
 
         hourET.setOnFocusChangeListener((v, hasFocus) -> {
             int hour = getNumber(hourET.getText());
-            if(hour == hourNP.getValue()){
-                if(hour == 0) hourET.setText("");
-                return;
-            }
-            hourNP.setValue(hour % 48);
+            hourNP.setValue(Math.min(48, hour));
         });
-
         minuteET.setOnFocusChangeListener((v, hasFocus) -> {
             int minute = getNumber(minuteET.getText());
-            int hour = (getNumber(hourET.getText()) + minute/60) % 48;
             if(minute == minuteNP.getValue()){
                 if(minute == 0) minuteET.setText("");
                 return;
             }
             minuteET.setText((minute % 60 + ""));
             minuteNP.setValue(minute % 60);
-            hourET.setText((hour+""));
-            hourNP.setValue(hour);
+            hourET.setText((Math.min(48, minute/60)+""));
+            hourNP.setValue(Math.min(48, minute/60));
         });
-
         secondET.setOnFocusChangeListener((v, hasFocus) -> {
             int second = getNumber(secondET.getText());
-            int minute = (getNumber(minuteET.getText()) + second / 60) % 60;
-            int hour = (getNumber(hourET.getText()) + second / 60 / 60) % 48;
             if(second == secondNP.getValue()){
                 if(second == 0) secondET.setText("");
                 return;
             }
             secondET.setText((second % 60 + ""));
             secondNP.setValue(second % 60);
-            minuteET.setText((minute+""));
-            minuteNP.setValue(minute);
-            hourET.setText((hour+""));
-            hourNP.setValue(hour);
-        });
-
-        resetBtn.setOnClickListener(view -> {
-            secondET.setText("0");
-            minuteET.setText("0");
-            hourET.setText("0");
-            secondNP.setValue(0);
-            minuteNP.setValue(0);
-            hourNP.setValue(0);
+            minuteET.setText(((second/60)%60+""));
+            minuteNP.setValue((second/60)%60);
+            hourET.setText((Math.min(48, second/60/60)+""));
+            hourNP.setValue(Math.min(48, second/60/60));
         });
 
         // 시작버튼 이벤트 처리
@@ -161,13 +142,10 @@ public class MainActivity extends AppCompatActivity {
             minuteTV.setText((clock[1] <= 9 ? "0" : "") + clock[1] + "분");
             secondTV.setText((clock[2] <= 9 ? "0" : "") + clock[2] + "초");
 
-            dateTV.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis())));
-
             Timer timer = new Timer();
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() { // 반복실행할 구문
-
                     if(!started) {
                         runOnUiThread(() -> {
                             paused = true;
@@ -175,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
                             hourTV.setText(clock[0] + "시간");
                             minuteTV.setText((clock[1] <= 9 ? "0" : "") + clock[1] + "분");
                             secondTV.setText((clock[2] <= 9 ? "0" : "") + clock[2] + "초");
+                            //timeCountSettingLV.setVisibility(View.VISIBLE);
+                            //timeCountLV.setVisibility(View.GONE);
                             startBtn.setText("재시작");
                         });
                         timer.cancel();
