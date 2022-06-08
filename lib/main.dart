@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:timer/stopwatch.dart';
+import 'package:timer/timers/maintimer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
         backgroundColor: colors[_selectedIndex],
         title: const Text('Flutter Timer Demo'),
       ),
-      body: const StopwatchPage(),
+      body: const MainTimerPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
