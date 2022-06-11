@@ -14,10 +14,10 @@ class MainTimerPage extends StatefulWidget {
 class _MainTimerPageState extends State<StatefulWidget> {
   @override
   Widget build(BuildContext context) {
-    return  DefaultTabController(
+    return const DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: const TabBar(
+        appBar: TabBar(
           labelColor: Colors.blue,
           tabs: [
             Tab(text: 'Stopwatch'),
@@ -26,19 +26,14 @@ class _MainTimerPageState extends State<StatefulWidget> {
             //Tab(text: 'TimeZone')
           ],
         ),
-      body: ListenableProvider(
-          create: (_)=>Times(),
-          builder: (context, _) {
-            return const TabBarView(
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                StopwatchPage(),
-                TimerPage(),
-                //AlarmPage(),
-                //TimeZonePage(),
-              ],
-            );
-          }
+      body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            StopwatchPage(),
+            TimerPage(),
+            //AlarmPage(),
+            //TimeZonePage(),
+          ],
         )
       )
     );
