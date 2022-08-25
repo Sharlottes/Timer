@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:timer/calender.dart';
+import 'package:timer/setting.dart';
 import 'package:timer/timers/maintimer.dart';
 
 void main() {
-  runApp(const MyApp());
+  initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -28,8 +31,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0;
-  final colors = <Color>[Colors.blue, Colors.green, Colors.amber, Colors.blueGrey];
+  int _selectedIndex = 2;
+  final pages = <Widget>[
+    MainTimerPage(),
+    MainTimerPage(),
+    CalenderPage(),
+    SettingPage()
+  ];
+  final colors = <Color>[
+    Colors.blue,
+    Colors.green,
+    Colors.amber,
+    Colors.blueGrey
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,7 +58,20 @@ class _HomeState extends State<Home> {
         backgroundColor: colors[_selectedIndex],
         title: const Text('Flutter Timer Demo'),
       ),
-      body: const MainTimerPage(),
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 250),
+        child: pages[_selectedIndex],
+        transitionBuilder: (widget, animation) {
+          var begin = const Offset(1.0, 0.0);
+          var end = Offset.zero;
+          var tween = Tween(begin: begin, end: end)
+              .chain(CurveTween(curve: Curves.ease));
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: widget,
+          );
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -69,7 +96,9 @@ class _HomeState extends State<Home> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: HSVColor.fromColor(colors[_selectedIndex]).withValue(HSVColor.fromColor(colors[_selectedIndex]).value*0.4).toColor(),
+        selectedItemColor: HSVColor.fromColor(colors[_selectedIndex])
+            .withValue(HSVColor.fromColor(colors[_selectedIndex]).value * 0.4)
+            .toColor(),
         onTap: _onItemTapped,
       ),
     );
