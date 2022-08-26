@@ -5,7 +5,8 @@ import 'package:timer/setting.dart';
 import 'package:timer/timers/maintimer.dart';
 
 void main() {
-  initializeDateFormatting().then((_) => runApp(MyApp()));
+  initializeDateFormatting()
+      .then((_) => dates.initData().then((_) => runApp(MyApp())));
 }
 
 class MyApp extends StatelessWidget {
