@@ -39,7 +39,7 @@ class DateInfo {
               List dates = datas[y][int.parse(d["locdate"]
                       .toString()
                       .substring(4, 6)
-                      .replaceAll(RegExp("0\d"), "")) -
+                      .replaceAll("0", "")) -
                   1];
               if (!dates.any((element) => element["locdate"] == d["locdate"])) {
                 dates.add(d);
@@ -49,12 +49,21 @@ class DateInfo {
         })());
       }
     }
-    await Future.wait(futures);
+    //await Future.wait(futures);
     print(datas);
     data = datas;
   }
 
-  getInfo(int year, int month) {
+  List? getInfoInMonth(int year, int month) {
     return data[year - DateTime.now().year + 1][month - 1];
+  }
+
+  dynamic getInfo(int year, int month, int day) {
+    List? list = getInfoInMonth(year, month);
+
+    return list?.singleWhere((element) {
+      return day.toString().padLeft(2, "0") ==
+          element["locdate"].toString().substring(6);
+    }, orElse: () => null);
   }
 }

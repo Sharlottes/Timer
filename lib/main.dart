@@ -6,7 +6,7 @@ import 'package:timer/timers/maintimer.dart';
 
 void main() {
   initializeDateFormatting()
-      .then((_) => dates.initData().then((_) => runApp(MyApp())));
+      .then((_) => holidayDatas.initData().then((_) => runApp(MyApp())));
 }
 
 class MyApp extends StatelessWidget {
