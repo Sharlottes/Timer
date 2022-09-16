@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timer/dateinfo.dart';
 
-import 'datepicker.dart';
+import 'eventDialog.dart';
 
 DateInfo holidayDatas = DateInfo();
 List<String> datekinds = ["국경일", "기념일", '24절기', "잡절"];
@@ -22,44 +22,11 @@ class CalenderPage extends StatefulWidget {
 class _CalenderPageState extends State<CalenderPage> {
   DateTime _focusedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  Set<String> kinds = {"국경일", "기념일", '24절기', "잡절"};
+  final Set<String> kinds = {"국경일", "기념일", '24절기', "잡절"};
   Map<DateTime, List> events = {};
 
-  Future showEventCreateDialog(DateTime? datetime) {
-    double dialogWidth = 300, dialogHeight = 300;
-    return showDialog(
-        context: context,
-        builder: (ctx) => Center(
-            child: Container(
-                width: dialogWidth,
-                height: dialogHeight,
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(children: [
-                            const Text("새 일정 만들기",
-                                style: TextStyle(fontSize: 15)),
-                            const Divider(),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: DatePicker(),
-                            )
-                          ]),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: Text("done"))
-                            ],
-                          )
-                        ])))));
+  Future showEventCreateDialog() {
+    return showDialog(context: context, builder: (ctx) => const EventDialog());
   }
 
   @override
@@ -76,11 +43,12 @@ class _CalenderPageState extends State<CalenderPage> {
                   focusedDay: _focusedDay,
                   calendarFormat: _calendarFormat,
                   onDaySelected: (start, end) {
-                    showEventCreateDialog(null).then((_) {
+                    showEventCreateDialog().then((_) {
                       setState(() {
                         events.putIfAbsent(start, () => []);
                         events.update(start, (value) {
-                          value.add("asdfas");
+                          value.add(" "
+                              "");
                           return value;
                         });
                         print(events);
